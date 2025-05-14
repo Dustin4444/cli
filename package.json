@@ -108,7 +108,7 @@
     "env-paths": "3.0.0",
     "envinfo": "7.14.0",
     "etag": "1.8.1",
-    "execa": "5.1.1",
+    "execa": "9.5.2",
     "express": "4.21.1",
     "express-logging": "1.1.1",
     "extract-zip": "2.0.1",
