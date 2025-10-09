@@ -201,13 +201,13 @@
     "@types/semver": "7.5.8",
     "@types/uuid": "9.0.8",
     "@types/ws": "8.5.12",
-    "@vitest/coverage-v8": "1.6.0",
-    "c8": "9.1.0",
+    "@vitest/coverage-v8": "2.0.0",
+    "c8": "10.0.0",
     "cheerio": "1.0.0",
     "eslint-plugin-sort-destructure-keys": "2.0.0",
     "eslint-plugin-workspace": "file:./tools/lint-rules",
     "fast-glob": "3.3.2",
-    "form-data": "4.0.1",
+    "form-data": "4.0.4",
     "fs-extra": "11.2.0",
     "graphviz": "0.0.9",
     "husky": "8.0.3",
@@ -222,8 +222,8 @@
     "temp-dir": "3.0.0",
     "tree-kill": "1.2.2",
     "typescript": "5.1.6",
-    "verdaccio": "6.0.1",
-    "vitest": "1.6.0"
+    "verdaccio": "6.1.6",
+    "vitest": "1.6.1"
   },
   "ava": {
     "files": [
