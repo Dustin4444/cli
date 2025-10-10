@@ -42,7 +42,7 @@
     "styled-system": "5.1.5"
   },
   "devDependencies": {
-    "markdown-magic": "2.6.1",
+    "markdown-magic": "3.0.0",
     "npm-run-all2": "5.0.2",
     "sane": "5.0.1",
     "strip-ansi": "7.1.0"
