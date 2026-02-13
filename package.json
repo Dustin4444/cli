@@ -74,7 +74,7 @@
     "@bugsnag/js": "7.25.0",
     "@fastify/static": "7.0.4",
     "@netlify/blobs": "8.1.0",
-    "@netlify/build": "29.56.0",
+    "@netlify/build": "33.4.6",
     "@netlify/build-info": "7.15.2",
     "@netlify/config": "20.19.0",
     "@netlify/edge-bundler": "12.2.3",
@@ -109,7 +109,7 @@
     "envinfo": "7.14.0",
     "etag": "1.8.1",
     "execa": "5.1.1",
-    "express": "4.21.1",
+    "express": "4.22.0",
     "express-logging": "1.1.1",
     "extract-zip": "2.0.1",
     "fastest-levenshtein": "1.0.16",
@@ -222,7 +222,7 @@
     "temp-dir": "3.0.0",
     "tree-kill": "1.2.2",
     "typescript": "5.1.6",
-    "verdaccio": "6.0.1",
+    "verdaccio": "6.2.5",
     "vitest": "1.6.0"
   },
   "ava": {
