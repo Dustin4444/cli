@@ -17,14 +17,8 @@ import { reportError } from './telemetry/report-error.js'
 import type { TokenLocation } from './types.js'
 import type { CachedConfig } from '../lib/build.js'
 
-/** The parsed process argv without the binary only arguments and flags */
 const argv = process.argv.slice(2)
-/**
- * Chalk instance for CLI that can be initialized with no colors mode
- * needed for json outputs where we don't want to have colors
- * @param  {boolean} noColors - disable chalk colors
- * @return {ChalkInstancePrimitiveType} - default or custom chalk instance
- */
+
 const safeChalk = function (noColors: boolean) {
   if (noColors) {
     const colorlessChalk = new Chalk({ level: 0 })
@@ -37,13 +31,6 @@ export const chalk = safeChalk(argv.includes('--json'))
 
 export type ChalkInstance = ChalkInstancePrimitiveType
 
-/**
- * Adds the filler to the start of the string
- * @param {string} str
- * @param {number} count
- * @param {string} [filler]
- * @returns {string}
- */
 export const padLeft = (str: string, count: number, filler = ' ') => str.padStart(str.length + count, filler)
 
 const platform = WSL ? 'wsl' : os.platform()
@@ -68,14 +55,6 @@ export const NETLIFYDEVERR = chalk.redBright('⬥')
 
 export const BANG = process.platform === 'win32' ? '»' : '›'
 
-/**
- * Sorts two options so that the base flags are at the bottom of the list
- * @param {import('commander').Option} optionA
- * @param {import('commander').Option} optionB
- * @returns {number}
- * @example
- * options.sort(sortOptions)
- */
 export const sortOptions = (optionA: Option, optionB: Option) => {
   // base flags should be always at the bottom
   if ((optionA.long && BASE_FLAGS.has(optionA.long)) || (optionB.long && BASE_FLAGS.has(optionB.long))) {
@@ -84,8 +63,7 @@ export const sortOptions = (optionA: Option, optionB: Option) => {
   return (optionA.long ?? '').localeCompare(optionB.long ?? '')
 }
 
-// Poll Token timeout 5 Minutes
-const TOKEN_TIMEOUT = 3e5
+const TOKEN_POLLING_TIMEOUT_MS = 5 * 60 * 1_000
 
 export const pollForToken = async ({
   api,
@@ -96,7 +74,7 @@ export const pollForToken = async ({
 }) => {
   const spinner = startSpinner({ text: 'Waiting for authorization...' })
   try {
-    const accessToken = await api.getAccessToken(ticket, { timeout: TOKEN_TIMEOUT })
+    const accessToken = await api.getAccessToken(ticket, { timeout: TOKEN_POLLING_TIMEOUT_MS })
     if (!accessToken) {
       return logAndThrowError('Could not retrieve access token')
     }
@@ -123,11 +101,6 @@ export const pollForToken = async ({
     spinner.clear()
   }
 }
-/**
- * Get a netlify token
- * @param {string} [tokenFromOptions] optional token from the provided --auth options
- * @returns {Promise<[null|string, 'flag' | 'env' |'config' |'not found']>}
- */
 
 export type TokenTuple = [string | null, TokenLocation]
 
@@ -153,9 +126,6 @@ export const getToken = async (tokenFromOptions?: string): Promise<TokenTuple> =
 // 'functions:invoke' need to return the data from the function as is
 const isDefaultJson = () => argv[0] === 'functions:invoke' || (argv[0] === 'api' && !argv.includes('--list'))
 
-/**
- * logs a json message
- */
 export const logJson = (message: unknown = '') => {
   if (argv.includes('--json') || isDefaultJson()) {
     process.stdout.write(JSON.stringify(message, null, 2))
@@ -177,9 +147,6 @@ export const logPadded = (message = '', ...args: string[]) => {
   log('')
 }
 
-/**
- * logs a warning message
- */
 export const warn = (message = '') => {
   const bang = chalk.yellow(BANG)
   log(` ${bang}   Warning: ${message}`)
