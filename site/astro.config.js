@@ -17,6 +17,9 @@ export default defineConfig({
       credits: true,
       title: 'Netlify CLI command reference',
       description: 'Full command reference for the Netlify CLI',
+      components: {
+        Head: './src/components/Head.astro',
+      },
       social: [
         {
           icon: 'blueSky',
