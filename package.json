@@ -149,7 +149,7 @@
     "ulid": "^3.0.1",
     "update-notifier": "^7.3.1",
     "write-file-atomic": "^5.0.1",
-    "ws": "^8.19.0",
+    "ws": "^8.21.1",
     "yauzl": "^3.3.1"
   },
   "devDependencies": {
