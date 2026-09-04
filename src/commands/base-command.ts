@@ -56,8 +56,7 @@ inquirer.registerPrompt('autocomplete', inquirerAutocompletePrompt)
 // TODO: setup client for multiple environments
 export const CLIENT_ID = 'd6f37de6614df7ae58664cfca524744d73807a377f5ee71f1a254f78412e3750'
 
-const NANO_SECS_TO_MSECS = 1e6
-/** The fallback width for the help terminal */
+const NANOSECONDS_PER_MILLISECOND = 1_000_000
 const FALLBACK_HELP_CMD_WIDTH = 80
 
 const HELP_$ = NETLIFY_CYAN('$')
@@ -103,13 +102,11 @@ const getScrubbedOptions = (command: BaseCommand): Record<string, { source: Opti
     {},
   )
 
-/** Formats a help list correctly with the correct indent */
 const formatHelpList = (textArray: string[]) => textArray.join('\n').replace(/^/gm, ' '.repeat(HELP_INDENT_WIDTH))
 
-/** Get the duration between a start time and the current time */
 const getDuration = (startTime: bigint) => {
   const durationNs = process.hrtime.bigint() - startTime
-  return Math.round(Number(durationNs / BigInt(NANO_SECS_TO_MSECS)))
+  return Math.round(Number(durationNs / BigInt(NANOSECONDS_PER_MILLISECOND)))
 }
 
 /**
