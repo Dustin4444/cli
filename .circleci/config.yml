@@ -1,0 +1,147 @@
+version: 2.1
+
+executors:
+  node-medium:
+    docker:
+      - image: cimg/node:20.12
+    resource_class: medium
+  node-large:
+    docker:
+      - image: cimg/node:20.12
+    resource_class: large
+
+jobs:
+  install:
+    executor: node-medium
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - npm-deps-v1-{{ checksum "package-lock.json" }}
+            - npm-deps-v1-
+      - run:
+          name: Install dependencies
+          command: npm ci
+      - save_cache:
+          key: npm-deps-v1-{{ checksum "package-lock.json" }}
+          paths:
+            - node_modules
+      - persist_to_workspace:
+          root: .
+          paths:
+            - node_modules
+
+  lint:
+    executor: node-medium
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - restore_cache:
+          keys:
+            - eslint-cache-v1-{{ .Branch }}-
+            - eslint-cache-v1-
+      - run:
+          name: Lint
+          command: npm run lint
+      - save_cache:
+          key: eslint-cache-v1-{{ .Branch }}-{{ epoch }}
+          paths:
+            - .eslintcache
+
+  typecheck:
+    executor: node-medium
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Type check
+          command: npm run typecheck
+
+  build:
+    executor: node-medium
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Build TypeScript
+          command: npm run build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist
+
+  test-unit:
+    executor: node-medium
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Run unit tests
+          command: npm run test:unit
+          no_output_timeout: 10m
+
+  test-integration:
+    executor: node-large
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - restore_cache:
+          keys:
+            - fixture-deps-v1-{{ checksum "tests/integration/__fixtures__/hugo-site/package-lock.json" }}-{{ checksum "tests/integration/__fixtures__/next-app/package-lock.json" }}-{{ checksum "tests/integration/__fixtures__/next-app-without-config/package-lock.json" }}-{{ checksum "tests/integration/__fixtures__/monorepo/pnpm-lock.yaml" }}
+            - fixture-deps-v1-
+      - run:
+          name: Enable pnpm via corepack
+          command: corepack enable && corepack prepare pnpm@latest --activate
+      - run:
+          name: Initialize test fixtures
+          command: npm run test:init
+      - save_cache:
+          key: fixture-deps-v1-{{ checksum "tests/integration/__fixtures__/hugo-site/package-lock.json" }}-{{ checksum "tests/integration/__fixtures__/next-app/package-lock.json" }}-{{ checksum "tests/integration/__fixtures__/next-app-without-config/package-lock.json" }}-{{ checksum "tests/integration/__fixtures__/monorepo/pnpm-lock.yaml" }}
+          paths:
+            - tests/integration/__fixtures__/hugo-site/node_modules
+            - tests/integration/__fixtures__/next-app/node_modules
+            - tests/integration/__fixtures__/next-app-without-config/node_modules
+            - tests/integration/__fixtures__/monorepo/node_modules
+      - run:
+          name: Run integration tests
+          command: npm run test:integration
+          no_output_timeout: 30m
+
+  test-e2e:
+    executor: node-large
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Run E2E tests
+          command: npm run test:e2e
+          no_output_timeout: 30m
+
+workflows:
+  build-test:
+    jobs:
+      - install
+      - lint:
+          requires:
+            - install
+      - typecheck:
+          requires:
+            - install
+      - build:
+          requires:
+            - install
+      - test-unit:
+          requires:
+            - build
+      - test-integration:
+          requires:
+            - build
+      - test-e2e:
+          requires:
+            - build
