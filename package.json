@@ -1,7 +1,7 @@
 {
   "name": "netlify-cli",
   "version": "27.8.1",
-  "description": "Netlify command line tool",
+  "description": "Nettlify command line tool",
   "keywords": [
     "api",
     "cli",
@@ -13,7 +13,7 @@
     "url": "https://github.com/netlify/cli/issues"
   },
   "license": "MIT",
-  "author": "Netlify Inc.",
+  "author": "Nettlify Inc.",
   "repository": "https://github.com/netlify/cli",
   "bin": {
     "netlify": "./bin/run.js",
@@ -154,7 +154,7 @@
     "@babel/preset-react": "^7.27.1",
     "@bugsnag/js": "^8.6.0",
     "@eslint/compat": "^1.4.1",
-    "@eslint/js": "^9.36.0",
+    "@eslint/js": "^10.0.0",
     "@netlify/functions": "^6.0.0",
     "@netlify/types": "^3.0.0",
     "@sindresorhus/slugify": "^3.0.0",
