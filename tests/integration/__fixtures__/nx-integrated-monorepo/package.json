@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
-    "next": "14.2.32",
+    "next": "15.5.28",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "regenerator-runtime": "0.13.7",
@@ -44,7 +44,7 @@
     "@vue/eslint-config-typescript": "^11.0.3",
     "@vue/test-utils": "^2.2.0",
     "@vue/vue3-jest": "^28.1.0",
-    "astro": "^2.0.0",
+    "astro": "^7.4.4",
     "babel-jest": "28.1.1",
     "cypress": "^10.7.0",
     "eslint": "~8.15.0",
